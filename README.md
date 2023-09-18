@@ -1,51 +1,70 @@
-# cotuong.py - Thư viện dành cho cờ tướng
+# ChessAI
 
-[![Build Status](https://travis-ci.org/Ihsara/cotuong.py.svg?branch=master)](https://travis-ci.org/Ihsara/cotuong.py)
+AI for chess robot, starting with XiangQi (Chinese chess).
 
-Đây là một thư viện cho cờ tướng nhằm đơn giản và thúc đẩy khi dùng python để tương tác với cờ tướng
+- Main Code: `chesssai`.
+- Deep Learning / Data Preparation: `dnn_models/data_preparation`.
+- Deep Learning / Training: `dnn_models/training`.
 
-# Cài đặt
-cotuong.py dùng python 3.7.x và [pipenv](https://github.com/pypa/pipenv) để thiết đặt môi trường 
+## TODO
 
-```sh
-cd cotuong.py 
-pipenv install
-pipenv shell
-py.test tests/
+- [x] Object detection model for chess pieces.
+- [x] Board alignment and perspective crop.
+- [x] Chinese chess board position detection.
+- [ ] Add chess engine.
+- [ ] Code for controlling the robot arm.
+- [ ] Add 3D design.
+- [ ] Add 3D printing files.
+- [ ] Add documentation.
+- [ ] Support for other chess variants.
+
+## Environment Setup
+
+- Clone this repository.
+
+```bash
+git clone https://github.com/vietanhdev/chessai --recursive
 ```
 
-# Sử dụng
+- Python >= 3.9.
 
-## Tạo ván cờ mới
-
-```python
-from cotuong import GameState
-
-chesspiece_pos = {'A': [104, 106], 'C': [82, 88], 'E': [103, 107], 'G': [105], 'H': [102, 108], 'P': [71, 73, 75, 77, 79], 'R': [101, 109], 'a': [14, 16], 'c': [32, 38], 'e': [13, 17], 'g': [15], 'h': [12, 18], 'p': [41, 43, 45, 47, 49], 'r': [11, 19]}
-
-FEN_starting_pos = "rheagaehr/9/1c5c1/p1p1p1p1p/9/9/P1P1P1P1P/1C5C1/9/RHEAGAEHR w 1"
-
-new_game = GameState() #Ván mới hoàn toàn. Quân cờ ở vị trí khai cuộc mở màn
-new_game_2 = GameState(load= FEN_starting_pos) #Khởi tạo ván cờ từ dãy FEN. TBD
-new_game_3 = GameState(load=chesspiece_pos) #Khởi tạo ván cờ từ từ điển. TBD
+```bash
+pip install -r requirements.txt
 ```
 
-## Kiểm tra nước cờ hợp lệ hay không
+Or using `Conda`:
 
-```python 
-from verify import Advisor #Quân cờ nào cần kiểm tra 
-``` 
+```bash
+conda create -n chessai python=3.9
+conda activate chessai
+pip install -r requirements.txt
+```
 
-# Cần phải làm 
+## Build chess engine
 
-- [ ] Kiểm nước cờ hợp lệ
-- [ ] Tạo ván cờ từ FEN 
-- [ ] Tạo ván cờ từ điển
-- [ ] Phỏng đoán thế cờ
-- [ ] Đánh giá thế cờ hiện tại
-- [ ] Cập nhật jupyter-notebook cho cách sử dụng
-- [ ] Đọc nguyên ván cờ từ file json
-- [ ] Đánh giá hiệu năng khi xử lý số lượng lớn
-- [ ] Tìm hiểu thêm tính năng cần thiết khác
+- This project uses [godogpaw](https://github.com/hmgle/godogpaw) as the chess engine.
+- Install [Go](https://go.dev/doc/install).
+- Build the engine.
 
+```bash
+cd godogpaw
+go build
+```
 
+- Copy the executable file (`godogpaw*`) to the [./data/engines](./data/engines) folder.
+
+## Usage
+
+```bash
+ENGINE_PATH="data/engines/godogpaw-macos-arm" python main.py
+```
+
+Replace `ENGINE_PATH` with the path to the chess engine executable file.
+
+- Press `ESC` to quit.
+- Press `m` to get move from chess engine.
+
+## References
+
+- This project was initially built for [Hackster's OpenCV AI Competition 2023](https://www.hackster.io/contests/opencv-ai-competition-2023). Hackster Project: [CCBot - Chinese Chess (XiangQi) robot with Vision](https://www.hackster.io/vietanhdev/ccbot-chinese-chess-xiangqi-robot-with-vision-4be768).
+- Object detection model was trained using [YOLOX](https://github.com/Megvii-BaseDetection/YOLOX).
